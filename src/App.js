@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import './App.css';
 import { FormControl, Select, MenuItem } from '@material-ui/core'
-import CityCard from './CityCard';
+import CityCard from './Components/CityCard';
+import PaginationRounded from './Components/PaginationRounded'
 
 function App() {
 
   const [cities, setCities] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage] = useState(10)
 
   const continents = [
     { name: 'Africa', geonames: 'AF' },
@@ -30,8 +33,13 @@ function App() {
       })
   }
 
+  // Get current posts 
+  const indexOfLastCity = currentPage * postsPerPage;
+  const indexOfFirstCity = indexOfLastCity - postsPerPage;
+  const currentCities = cities.slice(indexOfFirstCity, indexOfLastCity);
 
-
+  // Change page 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
     <div className="App">
@@ -46,7 +54,11 @@ function App() {
         </Select>
       </FormControl>
 
-      <CityCard cities={cities} />
+
+      <CityCard cities={currentCities} />
+
+      <PaginationRounded postsPerPage={postsPerPage} totalPosts={cities.length} paginate={paginate} />
+
     </div>
   );
 }

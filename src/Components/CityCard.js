@@ -1,9 +1,10 @@
 import React from 'react'
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core'
+import '../Styles/CityCards.css'
 
 function CityCard({ cities }) {
     return (
-        <div>
+        <div className="city__cards">
             {cities.map(city =>
                 <Card
 
