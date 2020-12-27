@@ -4,11 +4,14 @@ import { FormControl, Select, MenuItem } from '@material-ui/core'
 import CityCard from './Components/CityCard';
 import PaginationRounded from './Components/PaginationRounded'
 
+
 function App() {
 
   const [cities, setCities] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage] = useState(10)
+  const [images, setImages] = useState([])
+
 
   const continents = [
     { name: 'Africa', geonames: 'AF' },
@@ -23,20 +26,34 @@ function App() {
 
   const onContinentChange = (e) => {
     const geoName = e.target.value
-
     fetch(`https://api.teleport.org/api/continents/geonames%3A${geoName}/urban_areas/`)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         const cities = data._links['ua:items'].map(city => city.name)
         setCities(cities)
       })
+    setCurrentPage(1)
   }
 
   // Get current posts 
   const indexOfLastCity = currentPage * postsPerPage;
   const indexOfFirstCity = indexOfLastCity - postsPerPage;
   const currentCities = cities.slice(indexOfFirstCity, indexOfLastCity);
+
+  // Get photos for current cities 
+  const getCityImage = (cityName) => {
+    fetch(`https://api.teleport.org/api/urban_areas/?embed=ua:item/ua:images`)
+      .then(response => response.json())
+      .then(data => {
+        let city = data._embedded['ua:item'].findIndex(city => city.name === cityName);
+        let cityImage = data._embedded['ua:item'][city]._embedded['ua:images']['photos'];
+        return cityImage[0]['image']['web']
+      })
+  }
+
+  const currentCityImages = currentCities.map(city => getCityImage(city))
+  console.log(currentCityImages);
+
 
   // Change page 
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
@@ -57,7 +74,7 @@ function App() {
 
       <CityCard cities={currentCities} />
 
-      <PaginationRounded postsPerPage={postsPerPage} totalPosts={cities.length} paginate={paginate} />
+      <PaginationRounded postsPerPage={postsPerPage} totalPosts={cities.length} paginate={paginate} currentPage={currentPage} />
 
     </div>
   );

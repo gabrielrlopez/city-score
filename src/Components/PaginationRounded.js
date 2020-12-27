@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pagination } from '@material-ui/lab';
 
-function PaginationRounded({ postsPerPage, totalPosts, paginate }) {
+function PaginationRounded({ postsPerPage, totalPosts, paginate, currentPage }) {
     let pageNumbers = Math.ceil(totalPosts / postsPerPage);
 
     const handleChange = (event, pageNumber) => {
@@ -10,7 +10,7 @@ function PaginationRounded({ postsPerPage, totalPosts, paginate }) {
 
     return (
         <div>
-            <Pagination count={pageNumbers} variant="outlined" shape="rounded" onChange={handleChange} />
+            <Pagination count={pageNumbers} variant="outlined" shape="rounded" onChange={handleChange} page={currentPage} />
         </div>
     )
 }
