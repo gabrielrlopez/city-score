@@ -1,15 +1,19 @@
 import React from 'react'
-import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core'
+import { Card, CardActionArea, CardContent, Typography, CardMedia } from '@material-ui/core'
 import '../Styles/CityCards.css'
 
-function CityCard({ cities }) {
+function CityCard({ cities, cityImage }) {
     return (
         <div className="city__cards">
             {cities.map(city =>
                 <Card
-
+                    className="city__card"
                 >
                     <CardActionArea>
+                        <CardMedia
+                            className="city__image"
+                            image={cityImage}
+                        />
                         <CardContent>
                             <Typography
                                 variant="body2"

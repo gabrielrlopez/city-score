@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css';
-import { FormControl, Select, MenuItem } from '@material-ui/core'
+import { FormControl, Select, MenuItem, ClickAwayListener } from '@material-ui/core'
 import CityCard from './Components/CityCard';
 import PaginationRounded from './Components/PaginationRounded'
 
@@ -40,19 +40,27 @@ function App() {
   const indexOfFirstCity = indexOfLastCity - postsPerPage;
   const currentCities = cities.slice(indexOfFirstCity, indexOfLastCity);
 
+
   // Get photos for current cities 
-  const getCityImage = (cityName) => {
+  const getCityImage = (cityName) => (
     fetch(`https://api.teleport.org/api/urban_areas/?embed=ua:item/ua:images`)
       .then(response => response.json())
       .then(data => {
-        let city = data._embedded['ua:item'].findIndex(city => city.name === cityName);
-        let cityImage = data._embedded['ua:item'][city]._embedded['ua:images']['photos'];
-        return cityImage[0]['image']['web']
+        let city = data._embedded['ua:item'].find(city => city.name === cityName);
+        let { image } = city._embedded["ua:images"]['photos'][0];
+        return image;
       })
+
+  )
+
+  const setCityImages = async () => {
+    const asyncFunctions = currentCities.map(city => getCityImage(city));
+    const results = await Promise.all(asyncFunctions);
+    setImages(results)
   }
 
-  const currentCityImages = currentCities.map(city => getCityImage(city))
-  console.log(currentCityImages);
+  console.log(images);
+
 
 
   // Change page 
@@ -72,9 +80,16 @@ function App() {
       </FormControl>
 
 
-      <CityCard cities={currentCities} />
+      <CityCard
+        cities={currentCities}
+      />
 
-      <PaginationRounded postsPerPage={postsPerPage} totalPosts={cities.length} paginate={paginate} currentPage={currentPage} />
+      <PaginationRounded
+        postsPerPage={postsPerPage}
+        totalPosts={cities.length}
+        paginate={paginate}
+        currentPage={currentPage}
+      />
 
     </div>
   );
