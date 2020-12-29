@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import './App.css';
-import { FormControl, Select, MenuItem, ClickAwayListener } from '@material-ui/core'
+import { FormControl, Select, MenuItem } from '@material-ui/core'
 import CityCard from './Components/CityCard';
 import PaginationRounded from './Components/PaginationRounded'
 
 
 function App() {
 
-  const [cities, setCities] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage] = useState(10)
-  const [images, setImages] = useState([])
+  const [cities, setCities] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
+  const [images, setImages] = useState([]);
+  const [cityScores, setCityScores] = useState([]);
 
 
   const continents = [
@@ -23,7 +24,6 @@ function App() {
     { name: 'South America', geonames: 'SA' },
   ]
 
-
   const onContinentChange = (e) => {
     const geoName = e.target.value
     fetch(`https://api.teleport.org/api/continents/geonames%3A${geoName}/urban_areas/`)
@@ -35,33 +35,34 @@ function App() {
     setCurrentPage(1)
   }
 
-  // Get current posts 
   const indexOfLastCity = currentPage * postsPerPage;
   const indexOfFirstCity = indexOfLastCity - postsPerPage;
   const currentCities = cities.slice(indexOfFirstCity, indexOfLastCity);
-
-
   // Get photos for current cities 
   const getCityImage = (cityName) => (
     fetch(`https://api.teleport.org/api/urban_areas/?embed=ua:item/ua:images`)
       .then(response => response.json())
       .then(data => {
         let city = data._embedded['ua:item'].find(city => city.name === cityName);
+        setCityScores(city)
         let { image } = city._embedded["ua:images"]['photos'][0];
-        return image;
+        return image['web'];
       })
-
   )
 
-  const setCityImages = async () => {
-    const asyncFunctions = currentCities.map(city => getCityImage(city));
-    const results = await Promise.all(asyncFunctions);
-    setImages(results)
-  }
+  // const getCityScore = (cityName) => {
+  //   const scores = cityName._links
+  // }
+  // getCityScore(cityScores)
 
-  console.log(images);
-
-
+  useEffect(() => {
+    const setCityImages = async () => {
+      const asyncFunctions = currentCities.map(city => getCityImage(city));
+      const results = await Promise.all(asyncFunctions);
+      setImages(results)
+    }
+    setCityImages()
+  }, [currentCities.length, currentPage])
 
   // Change page 
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
@@ -82,6 +83,7 @@ function App() {
 
       <CityCard
         cities={currentCities}
+        images={images}
       />
 
       <PaginationRounded
