@@ -13,3 +13,7 @@
     height: 150px;
     background-size: cover;
 }
+
+.city__cards--hidden {
+    display: none;
+}
