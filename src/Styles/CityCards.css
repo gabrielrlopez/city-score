@@ -17,3 +17,18 @@
 .city__cards--hidden {
     display: none;
 }
+
+.score__cards {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.score__card{
+    /* max-width: 300px;
+    max-height: 300px; */
+}
+
+.icon{
+    text-align: center;
+}
+

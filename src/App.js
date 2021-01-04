@@ -4,7 +4,6 @@ import { FormControl, Select, MenuItem } from '@material-ui/core';
 import CityCard from './Components/CityCard';
 import PaginationRounded from './Components/PaginationRounded';
 import LoadingSpinner from './Components/LoadingSpinner';
-import ScoreCards from './Components/ScoreCards';
 import { getCityImages, getCityScoreLink } from './util.js'
 
 
@@ -65,8 +64,6 @@ function App() {
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
-  console.log(cityScoreLinks);
-
   return (
     <div className="App">
       <h1>Quality of life</h1>
@@ -84,10 +81,6 @@ function App() {
         cities={currentCities}
         images={images}
         links={cityScoreLinks}
-      />
-
-      <ScoreCards
-
       />
 
       <PaginationRounded
