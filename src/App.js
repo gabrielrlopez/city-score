@@ -88,6 +88,7 @@ function App() {
         totalPosts={cities.length}
         paginate={paginate}
         currentPage={currentPage}
+
       />
     </div>
   );

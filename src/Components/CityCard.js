@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardContent, Typography, CardMedia } from '@mater
 import '../Styles/CityCards.css'
 import { useEffect, useState } from 'react';
 import { svgPaths } from '../util.js'
-import { Doughnut, defaults } from 'react-chartjs-2';
+
 
 function CityCard({ cities, images, links }) {
 
@@ -21,29 +21,7 @@ function CityCard({ cities, images, links }) {
                 setscores(categories)
             })
     }
-
-    const data = {
-        labels: [
-            'Red',
-            'Green',
-            'Yellow'
-        ],
-        datasets: [{
-            data: scores.map(score => score.score_out_of_10),
-            backgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56'
-            ],
-            hoverBackgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56'
-            ]
-        }]
-    };
-
-    console.log(data.datasets[0]['data']);
+    console.log(scores);
 
     return (
         <>
@@ -73,9 +51,12 @@ function CityCard({ cities, images, links }) {
             </div>
 
             <div className="score__cards">
-                {scores.map((score, i) =>
-                    <Card className="score__card">
+                {scores.map((score) =>
+                    < Card
+                        className={"score__card"}
+                    >
                         <CardContent
+                            className="content"
                             style={{ backgroundColor: score.color }}
                         >
                             <Typography
@@ -87,7 +68,21 @@ function CityCard({ cities, images, links }) {
                             <div className="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"><path d={svgPaths[score.name]} /></svg>
                             </div>
-                            <Doughnut data={data} />
+                            <div className="percent">
+                                <svg>
+                                    <circle cx='70' cy='70' r='70'></circle>
+                                    <circle
+                                        cx='70' cy='70' r='70'
+                                        style={{
+                                            stroke: "#00ff43",
+                                            strokeDashoffset: 440 - (440 * Math.ceil(score.score_out_of_10) * 10) / 100
+                                        }}
+                                    ></circle>
+                                </svg>
+                                <div className="number">
+                                    <h2>{Math.ceil(score.score_out_of_10)}<span>/</span>10</h2>
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>)}
             </div>
