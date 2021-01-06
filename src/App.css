@@ -2,8 +2,13 @@
   margin: 0 auto;
 }
 
+
 .App {
-  max-width: 1200px;
+  max-width: 1200px; 
+}
+
+.pagination {
+  display: none;
 }
 
 /* background-color: #0d1117 !important;

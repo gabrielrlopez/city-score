@@ -15,6 +15,7 @@ function App() {
   const [images, setImages] = useState([]);
   const [basicCityInfo, setBasicCityInfo] = useState([])
   const [cityScoreLinks, setScoreLinks] = useState([]);
+  const [click, setClick] = useState('')
 
   const indexOfLastCity = currentPage * postsPerPage;
   const indexOfFirstCity = indexOfLastCity - postsPerPage;
@@ -40,6 +41,7 @@ function App() {
         setCities(cities)
       })
     setCurrentPage(1)
+    setClick(true)
   }
 
   // Set images for current cities
@@ -63,33 +65,40 @@ function App() {
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
+  console.log(click);
 
   return (
     <div className="App">
-      <h1>Quality of life</h1>
 
-      <FormControl>
-        <Select
-          onChange={onContinentChange}
-          variant="outlined"
-        >
-          {continents.map(continent => <MenuItem value={continent.geonames}>{continent.name}</MenuItem>)}
-        </Select>
-      </FormControl>
+      <div className="header">
+        <FormControl>
+          <Select
+            onChange={onContinentChange}
+            variant="outlined"
+          >
+            {continents.map(continent => <MenuItem value={continent.geonames}>{continent.name}</MenuItem>)}
+          </Select>
+        </FormControl>
+      </div>
+
 
       <CityCard
         cities={currentCities}
         images={images}
         links={cityScoreLinks}
-      />
-
-      <PaginationRounded
         postsPerPage={postsPerPage}
         totalPosts={cities.length}
         paginate={paginate}
         currentPage={currentPage}
-
+        changedContinent={click}
       />
+
+      {/* <PaginationRounded
+        postsPerPage={postsPerPage}
+        totalPosts={cities.length}
+        paginate={paginate}
+        currentPage={currentPage}
+      /> */}
     </div>
   );
 }

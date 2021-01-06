@@ -1,12 +1,12 @@
 import React from 'react'
 import { Card, CardActionArea, CardContent, Typography, CardMedia } from '@material-ui/core'
+import ArrowBackSharpIcon from '@material-ui/icons/ArrowBackSharp';
 import '../Styles/CityCards.css'
 import { useEffect, useState } from 'react';
 import { svgPaths } from '../util.js'
+import { Pagination } from '@material-ui/lab';
 
-
-function CityCard({ cities, images, links }) {
-
+function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, currentPage, changedContinent }) {
     const [clicked, setClick] = useState(false)
     const [scores, setscores] = useState([])
 
@@ -22,6 +22,12 @@ function CityCard({ cities, images, links }) {
             })
     }
     console.log(scores);
+    //pagination
+    let pageNumbers = Math.ceil(totalPosts / postsPerPage);
+
+    const handleChange = (event, pageNumber) => {
+        paginate(pageNumber)
+    };
 
     return (
         <>
@@ -46,8 +52,8 @@ function CityCard({ cities, images, links }) {
                                 </Typography>
                             </CardContent>
                         </CardActionArea>
-
                     </Card>)}
+                <Pagination count={pageNumbers} variant="outlined" shape="rounded" onChange={handleChange} page={currentPage} hidePrevButton hideNextButton />
             </div>
 
             <div className="score__cards">
@@ -68,8 +74,8 @@ function CityCard({ cities, images, links }) {
                             <div className="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"><path d={svgPaths[score.name]} /></svg>
                             </div>
-                            <div className="percent">
-                                <svg>
+
+                            {/* <svg>
                                     <circle cx='70' cy='70' r='70'></circle>
                                     <circle
                                         cx='70' cy='70' r='70'
@@ -78,10 +84,19 @@ function CityCard({ cities, images, links }) {
                                             strokeDashoffset: 440 - (440 * Math.ceil(score.score_out_of_10) * 10) / 100
                                         }}
                                     ></circle>
-                                </svg>
-                                <div className="number">
-                                    <h2>{Math.ceil(score.score_out_of_10)}<span>/</span>10</h2>
+                                </svg> */}
+                            <div className="progress">
+                                <div className="progress__done"
+                                    style={{
+                                        width: Math.ceil(score.score_out_of_10) + '0%',
+                                        opacity: 1
+                                    }}
+                                >
                                 </div>
+                            </div>
+
+                            <div className="number">
+                                <h2>{Math.ceil(score.score_out_of_10)}<span>/</span>10</h2>
                             </div>
                         </CardContent>
                     </Card>)}
