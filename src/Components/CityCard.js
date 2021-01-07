@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react';
 import { svgPaths } from '../util.js'
 import { Pagination } from '@material-ui/lab';
 
-function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, currentPage, changedContinent }) {
+function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, currentPage }) {
     const [clicked, setClick] = useState(false)
     const [scores, setscores] = useState([])
+    const [hiddenScores, setHiddenScores] = useState(false)
+    const [arrowVisibility, setArrowVisibility] = useState(false)
 
     const click = (e) => {
         setClick(true)
@@ -20,8 +22,11 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
                 const { categories } = data
                 setscores(categories)
             })
+        setHiddenScores(false)
+        setArrowVisibility(true)
     }
     console.log(scores);
+
     //pagination
     let pageNumbers = Math.ceil(totalPosts / postsPerPage);
 
@@ -29,8 +34,15 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
         paginate(pageNumber)
     };
 
+    //hide score cards on back button click 
+    const hide = () => {
+        setHiddenScores(true)
+        setClick(false)
+    }
+
     return (
         <>
+            {/**City cards*/}
             <div className={clicked ? "city__cards--hidden" : "city__cards"}>
                 {cities.map((city, i) =>
                     <Card
@@ -53,10 +65,16 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
                             </CardContent>
                         </CardActionArea>
                     </Card>)}
+            </div>
+
+            {/**Pagination */}
+            <div className={clicked ? "pagination--hidden" : "pagination"}>
                 <Pagination count={pageNumbers} variant="outlined" shape="rounded" onChange={handleChange} page={currentPage} hidePrevButton hideNextButton />
             </div>
 
-            <div className="score__cards">
+            {/**Score cards */}
+            <div className={hiddenScores ? "score__cards--hidden" : "score__cards"}>
+                {/* <h1>City scores out of ten</h1> */}
                 {scores.map((score) =>
                     < Card
                         className={"score__card"}
@@ -75,16 +93,6 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
                                 <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"><path d={svgPaths[score.name]} /></svg>
                             </div>
 
-                            {/* <svg>
-                                    <circle cx='70' cy='70' r='70'></circle>
-                                    <circle
-                                        cx='70' cy='70' r='70'
-                                        style={{
-                                            stroke: "#00ff43",
-                                            strokeDashoffset: 440 - (440 * Math.ceil(score.score_out_of_10) * 10) / 100
-                                        }}
-                                    ></circle>
-                                </svg> */}
                             <div className="progress">
                                 <div className="progress__done"
                                     style={{
@@ -100,6 +108,15 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
                             </div>
                         </CardContent>
                     </Card>)}
+                {/* <ArrowBackSharpIcon
+                    onClick={hide}
+                    className={arrowVisibility ? "back__arrow" : "back__arrow--hidden"}
+                    fontSize="large"
+                /> */}
+
+                <div className={arrowVisibility ? "back__arrow" : "back__arrow--hidden"} onClick={hide}>
+                    <ion-icon name="arrow-back-circle-outline"></ion-icon>
+                </div>
             </div>
         </>
     )

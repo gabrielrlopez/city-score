@@ -15,18 +15,19 @@
     background-size: cover;
 }
 
-.city__cards--hidden {
-    display: none;
-}
-
-.score__cards--hidden {
-    display: none;
+.pagination {
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
 
 .icon{
     text-align: center;
 }
 
+
+/*Score cards*/
 
 /*Progress bar*/
 .progress {
@@ -49,5 +50,21 @@
     float: left;
 }
 
+/*Back arrow*/
 
+.back__arrow {
+    cursor: pointer;
+    float: right;
+    margin: 10px;
+}
+
+ion-icon {
+    font-size: 50px;
+}
+
+/*Hidden feature*/
+.city__cards--hidden, .pagination--hidden,
+.score__cards--hidden, .back__arrow--hidden {
+    display: none;
+} 
 

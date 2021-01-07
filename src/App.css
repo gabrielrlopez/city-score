@@ -4,12 +4,36 @@
 
 
 .App {
-  max-width: 1200px; 
+  max-width: 1200px;
+  font-family: 'Gamja Flower', cursive;
 }
 
-.pagination {
+.title {
+  text-decoration: underline;
+  text-align: center;
+}
+
+.select_a_city{
+  text-align: center;
+}
+
+.no__cities{
+  color: red;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.card__container {
+  background-image: url(./assets/background.png);
+  background-position: bottom;
+  height: 800px;
+}
+
+/*Hidden feature*/
+.select_a_city--hidden, .select_a_continent--hidden,
+.no__cities--hidden, .card__container--hidden {
   display: none;
 }
 
-/* background-color: #0d1117 !important;
-color: #58a6ff !important; */
+/* background-color: !important;
+color:  !important; */

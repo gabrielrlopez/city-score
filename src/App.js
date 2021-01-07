@@ -15,7 +15,7 @@ function App() {
   const [images, setImages] = useState([]);
   const [basicCityInfo, setBasicCityInfo] = useState([])
   const [cityScoreLinks, setScoreLinks] = useState([]);
-  const [click, setClick] = useState('')
+  const [visibility, setVisibility] = useState(false)
 
   const indexOfLastCity = currentPage * postsPerPage;
   const indexOfFirstCity = indexOfLastCity - postsPerPage;
@@ -41,7 +41,7 @@ function App() {
         setCities(cities)
       })
     setCurrentPage(1)
-    setClick(true)
+    setVisibility(true)
   }
 
   // Set images for current cities
@@ -65,13 +65,17 @@ function App() {
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
-  console.log(click);
+
 
   return (
     <div className="App">
 
       <div className="header">
-        <FormControl>
+        <h1 className="title">Urban City Scores</h1>
+        <h2 className={!visibility ? "select_a_continent" : "select_a_continent--hidden"}>Select a continent to begin.</h2>
+        <FormControl
+          className="form__control"
+        >
           <Select
             onChange={onContinentChange}
             variant="outlined"
@@ -79,8 +83,10 @@ function App() {
             {continents.map(continent => <MenuItem value={continent.geonames}>{continent.name}</MenuItem>)}
           </Select>
         </FormControl>
+        <h2 className={visibility && cities.length > 0 ? "select_a_city" : "select_a_city--hidden"}>Select a city to view its score out of ten on several different categories.</h2>
       </div>
 
+      <div className={!visibility ? "card__container" : "card__container--hidden"}></div>
 
       <CityCard
         cities={currentCities}
@@ -90,9 +96,7 @@ function App() {
         totalPosts={cities.length}
         paginate={paginate}
         currentPage={currentPage}
-        changedContinent={click}
       />
-
       {/* <PaginationRounded
         postsPerPage={postsPerPage}
         totalPosts={cities.length}
