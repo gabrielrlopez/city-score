@@ -16,6 +16,9 @@ function App() {
   const [basicCityInfo, setBasicCityInfo] = useState([])
   const [cityScoreLinks, setScoreLinks] = useState([]);
   const [visibility, setVisibility] = useState(false)
+  const [firstContinent, setFirstContinent] = useState('')
+  const [geoName, setGeoName] = useState('')
+  const [triggered, setTriggered] = useState(false)
 
   const indexOfLastCity = currentPage * postsPerPage;
   const indexOfFirstCity = indexOfLastCity - postsPerPage;
@@ -32,8 +35,15 @@ function App() {
     { name: 'South America', geonames: 'SA' },
   ]
 
+  const firstContinentSelected = (e) => {
+    setTriggered(true)
+    const firstContinent = e.target.value
+    setFirstContinent(firstContinent)
+  }
+
   const onContinentChange = (e) => {
     const geoName = e.target.value
+    setGeoName(geoName)
     fetch(`https://api.teleport.org/api/continents/geonames%3A${geoName}/urban_areas/`)
       .then(response => response.json())
       .then(data => {
@@ -53,6 +63,7 @@ function App() {
     }
     setCityImages()
 
+    // Get links to fetch city scores 
     const setCityScoreLinks = async () => {
       const getLinks = currentCities.map(city => getCityScoreLink(city));
       const links = await Promise.all(getLinks);
@@ -78,12 +89,13 @@ function App() {
         >
           <Select
             onChange={onContinentChange}
+            onClick={!triggered ? firstContinentSelected : null}
             variant="outlined"
           >
             {continents.map(continent => <MenuItem value={continent.geonames}>{continent.name}</MenuItem>)}
           </Select>
         </FormControl>
-        <h2 className={visibility && cities.length > 0 ? "select_a_city" : "select_a_city--hidden"}>Select a city to view its score out of ten on several different categories.</h2>
+        {/* <h2 className={visibility && cities.length > 0 ? "select_a_city" : "select_a_city--hidden"}>Select a city to view its score out of ten on several different categories.</h2> */}
       </div>
 
       <div className={!visibility ? "card__container" : "card__container--hidden"}></div>
@@ -96,6 +108,8 @@ function App() {
         totalPosts={cities.length}
         paginate={paginate}
         currentPage={currentPage}
+        firstContinent={firstContinent}
+        geoName={geoName}
       />
       {/* <PaginationRounded
         postsPerPage={postsPerPage}

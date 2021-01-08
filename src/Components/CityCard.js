@@ -6,13 +6,17 @@ import { useEffect, useState } from 'react';
 import { svgPaths } from '../util.js'
 import { Pagination } from '@material-ui/lab';
 
-function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, currentPage }) {
-    const [clicked, setClick] = useState(false)
-    const [scores, setscores] = useState([])
-    const [hiddenScores, setHiddenScores] = useState(false)
-    const [arrowVisibility, setArrowVisibility] = useState(false)
+function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, currentPage, firstContinent, geoName }) {
+    const [clicked, setClick] = useState(false);
+    const [scores, setscores] = useState([]);
+    const [hiddenScores, setHiddenScores] = useState(false);
+    const [arrowVisibility, setArrowVisibility] = useState(false);
+    const [changedContinent, setChangedContinent] = useState(false);
+    const [cityCardHeader, setCityCardHeader] = useState(false)
+    const [scoreCardHeader, setScoreCardHeader] = useState(false)
 
     const click = (e) => {
+        window.scrollTo(0, 0)
         setClick(true)
         const city = e.target.title
         const link = links.find(link => link.includes(city.toLowerCase().split(' ').join('-')))
@@ -24,36 +28,66 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
             })
         setHiddenScores(false)
         setArrowVisibility(true)
+        setChangedContinent(false)
+        setCityCardHeader(false)
     }
-    console.log(scores);
+
 
     //pagination
     let pageNumbers = Math.ceil(totalPosts / postsPerPage);
 
     const handleChange = (event, pageNumber) => {
         paginate(pageNumber)
+        window.scrollTo(0, 0)
     };
 
     //hide score cards on back button click 
     const hide = () => {
         setHiddenScores(true)
         setClick(false)
+        setCityCardHeader(true)
+        setScoreCardHeader(false)
+        window.scrollTo(0, 0)
     }
+
+    //Hide score cards 
+    useEffect(() => {
+        const hideScores = (first, second) => {
+            if (first !== second) setChangedContinent(true)
+            setClick(false)
+        }
+        hideScores(firstContinent, geoName)
+    }, [cities])
+
+    // display city card header 
+    useEffect(() => {
+        if (firstContinent) setCityCardHeader(true)
+    }, [geoName])
+
+
+
+    // display score card header 
+    useEffect(() => {
+        if (clicked) setScoreCardHeader(true)
+        if (cityCardHeader === true) setScoreCardHeader(false)
+    }, [clicked])
 
     return (
         <>
+            <h2 className={cityCardHeader ? "select_a_city" : "select_a_city--hidden"}>Select a city to view its score out of ten on several different categories.</h2>
+
             {/**City cards*/}
             <div className={clicked ? "city__cards--hidden" : "city__cards"}>
                 {cities.map((city, i) =>
                     <Card
                         className="city__card"
+                        onClick={click}
                     >
                         <CardActionArea>
                             <CardMedia
                                 className="city__image"
                                 image={images[i]}
                                 title={city}
-                                onClick={click}
                             />
                             <CardContent>
                                 <Typography
@@ -72,8 +106,10 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
                 <Pagination count={pageNumbers} variant="outlined" shape="rounded" onChange={handleChange} page={currentPage} hidePrevButton hideNextButton />
             </div>
 
+            <h2 className={scoreCardHeader ? "rainbow" : "rainbow--hidden"}>Here's a rainbow in case you didn't see one today :)</h2>
+
             {/**Score cards */}
-            <div className={hiddenScores ? "score__cards--hidden" : "score__cards"}>
+            <div className={hiddenScores || changedContinent ? "score__cards--hidden" : 'score__cards'}>
                 {/* <h1>City scores out of ten</h1> */}
                 {scores.map((score) =>
                     < Card

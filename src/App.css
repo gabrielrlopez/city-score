@@ -30,8 +30,8 @@
 }
 
 /*Hidden feature*/
-.select_a_city--hidden, .select_a_continent--hidden,
-.no__cities--hidden, .card__container--hidden {
+.select_a_continent--hidden,.no__cities--hidden,
+.card__container--hidden{
   display: none;
 }
 

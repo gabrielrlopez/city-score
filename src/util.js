@@ -18,7 +18,6 @@ export const getCityScoreLink = (cityName) => (
         .then(response => response.json())
         .then(data => {
             let city = data._embedded['ua:item'].find(city => city.name === cityName);
-            console.log(city);
             let cityScores = city._links['ua:scores']['href']
             return cityScores;
 

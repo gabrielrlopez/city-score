@@ -1,3 +1,6 @@
+.select_a_city{
+    text-align: center;
+}
 /*City cards*/
 .city__cards{
     display: grid;
@@ -23,6 +26,10 @@
 }
 
 .icon{
+    text-align: center;
+}
+
+.rainbow {
     text-align: center;
 }
 
@@ -64,7 +71,8 @@ ion-icon {
 
 /*Hidden feature*/
 .city__cards--hidden, .pagination--hidden,
-.score__cards--hidden, .back__arrow--hidden {
+.score__cards--hidden, .back__arrow--hidden,
+.select_a_city--hidden, .rainbow--hidden {
     display: none;
 } 
 
