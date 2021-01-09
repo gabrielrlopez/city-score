@@ -8,6 +8,10 @@
   font-family: 'Gamja Flower', cursive;
 }
 
+.spinner {
+  text-align: center;
+}
+
 .title {
   text-decoration: underline;
   text-align: center;

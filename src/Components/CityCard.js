@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, CardActionArea, CardContent, Typography, CardMedia } from '@material-ui/core'
-import ArrowBackSharpIcon from '@material-ui/icons/ArrowBackSharp';
+import LoadingSpinner from './LoadingSpinner';
 import '../Styles/CityCards.css'
 import { useEffect, useState } from 'react';
 import { svgPaths } from '../util.js'
@@ -14,24 +14,33 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
     const [changedContinent, setChangedContinent] = useState(false);
     const [cityCardHeader, setCityCardHeader] = useState(false)
     const [scoreCardHeader, setScoreCardHeader] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [opacity, setOpacity] = useState(0)
 
     const click = (e) => {
+        setLoading(true)
         window.scrollTo(0, 0)
         setClick(true)
         const city = e.target.title
-        const link = links.find(link => link.includes(city.toLowerCase().split(' ').join('-')))
+        const link = links.find(link => link.includes(city.replace(/[,.]/g, "").toLowerCase().split(' ').join('-')))
         fetch(link)
             .then(response => response.json())
             .then(data => {
+                setLoading(false)
                 const { categories } = data
                 setscores(categories)
             })
+
+        // Display score progress
+        setTimeout(() => {
+            const opacity = 1
+            setOpacity(opacity)
+        }, 300);
         setHiddenScores(false)
         setArrowVisibility(true)
         setChangedContinent(false)
         setCityCardHeader(false)
     }
-
 
     //pagination
     let pageNumbers = Math.ceil(totalPosts / postsPerPage);
@@ -64,18 +73,17 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
         if (firstContinent) setCityCardHeader(true)
     }, [geoName])
 
-
-
     // display score card header 
     useEffect(() => {
         if (clicked) setScoreCardHeader(true)
         if (cityCardHeader === true) setScoreCardHeader(false)
     }, [clicked])
 
+
     return (
         <>
             <h2 className={cityCardHeader ? "select_a_city" : "select_a_city--hidden"}>Select a city to view its score out of ten on several different categories.</h2>
-
+            {loading ? <LoadingSpinner /> : null}
             {/**City cards*/}
             <div className={clicked ? "city__cards--hidden" : "city__cards"}>
                 {cities.map((city, i) =>
@@ -132,24 +140,17 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
                             <div className="progress">
                                 <div className="progress__done"
                                     style={{
-                                        width: Math.ceil(score.score_out_of_10) + '0%',
-                                        opacity: 1
+                                        width: Math.round(score.score_out_of_10) + '0%',
+                                        opacity: opacity
                                     }}
                                 >
                                 </div>
                             </div>
-
                             <div className="number">
-                                <h2>{Math.ceil(score.score_out_of_10)}<span>/</span>10</h2>
+                                <h2>{Math.round(score.score_out_of_10)}<span>/</span>10</h2>
                             </div>
                         </CardContent>
                     </Card>)}
-                {/* <ArrowBackSharpIcon
-                    onClick={hide}
-                    className={arrowVisibility ? "back__arrow" : "back__arrow--hidden"}
-                    fontSize="large"
-                /> */}
-
                 <div className={arrowVisibility ? "back__arrow" : "back__arrow--hidden"} onClick={hide}>
                     <ion-icon name="arrow-back-circle-outline"></ion-icon>
                 </div>

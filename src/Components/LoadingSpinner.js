@@ -3,7 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 function LoadingSpinner() {
     return (
-        <div>
+        <div className="spinner">
             <CircularProgress />
         </div>
     )
