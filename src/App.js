@@ -3,7 +3,7 @@ import './App.css';
 import { FormControl, Select, MenuItem } from '@material-ui/core';
 import CityCard from './Components/CityCard';
 import LoadingSpinner from './Components/LoadingSpinner';
-import { getCityImages, getCityScoreLink } from './util.js'
+import { getBasicCityInfoLinks, getCityImages, getCityScoreLink } from './util.js'
 
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
   const [images, setImages] = useState([]);
-  const [basicCityInfo, setBasicCityInfo] = useState([]);
+  const [basicCityInfoLinks, setBasicCityInfoLinks] = useState([]);
   const [cityScoreLinks, setScoreLinks] = useState([]);
   const [visibility, setVisibility] = useState(false);
   const [firstContinent, setFirstContinent] = useState('');
@@ -64,6 +64,13 @@ function App() {
     }
     setCityImages()
 
+    //Get city population and country city belongs too links
+    const setPopAndCountry = async () => {
+      const getInfo = currentCities.map(city => getBasicCityInfoLinks(city));
+      const links = await Promise.all(getInfo);
+      setBasicCityInfoLinks(links)
+    }
+    setPopAndCountry()
     // Get links to fetch city scores 
     const setCityScoreLinks = async () => {
       const getLinks = currentCities.map(city => getCityScoreLink(city));
@@ -76,6 +83,7 @@ function App() {
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
+  console.log(basicCityInfoLinks);
 
   return (
     <div className="App">
@@ -99,7 +107,8 @@ function App() {
         <CityCard
           cities={currentCities}
           images={images}
-          links={cityScoreLinks}
+          scoreLinks={cityScoreLinks}
+          infoLinks={basicCityInfoLinks}
           postsPerPage={postsPerPage}
           totalPosts={cities.length}
           paginate={paginate}

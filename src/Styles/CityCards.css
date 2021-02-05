@@ -1,78 +1,79 @@
-.select_a_city{
-    text-align: center;
+.select_a_city {
+  text-align: center;
 }
 /*City cards*/
-.city__cards{
-    display: grid;
-    grid-template-columns: 50% 50%;
+.city__cards {
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
 
 .city__card {
-    margin: 20px;
-    background-size: cover;
+  margin: 20px;
+  background-size: cover;
 }
 
 .city__image {
-    width: 100%;
-    height: 150px;
-    background-size: cover;
+  width: 100%;
+  height: 150px;
+  background-size: cover;
 }
 
 .pagination {
-    max-width: 1200px;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }
 
-.icon{
-    text-align: center;
+.icon {
+  text-align: center;
 }
 
 .rainbow {
-    text-align: center;
+  text-align: center;
 }
-
 
 /*Score cards*/
 
 /*Progress bar*/
 .progress {
-    background-color: #d8d8d8;
-	border-radius: 20px;
-	position: relative;
-	height: 30px;
-    width: 300px;
+  background-color: #d8d8d8;
+  border-radius: 20px;
+  position: relative;
+  height: 30px;
+  width: 300px;
 }
 
 .progress__done {
-    background: linear-gradient(to left, #F2709C, #FF9472);
-	box-shadow: 0 3px 3px -5px #F2709C, 0 2px 5px #F2709C;
-	border-radius: 20px;
-	height: 100%;
-	width: 0;
-	opacity: 0;
-    transition: 1s ease 0.3s;
-    display: flex;
-    float: left;
+  background: linear-gradient(to left, #f2709c, #ff9472);
+  box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
+  border-radius: 20px;
+  height: 100%;
+  width: 0;
+  opacity: 0;
+  transition: 1s ease 0.3s;
+  display: flex;
+  float: left;
 }
 
 /*Back arrow*/
 
 .back__arrow {
-    cursor: pointer;
-    float: right;
-    margin: 10px;
+  cursor: pointer;
+  float: right;
+  margin: 10px;
 }
 
 ion-icon {
-    font-size: 50px;
+  font-size: 50px;
 }
 
 /*Hidden feature*/
-.city__cards--hidden, .pagination--hidden,
-.score__cards--hidden, .back__arrow--hidden,
-.select_a_city--hidden, .rainbow--hidden {
-    display: none;
-} 
-
+.city__cards--hidden,
+.pagination--hidden,
+.score__cards--hidden,
+.back__arrow--hidden,
+.select_a_city--hidden,
+.rainbow--hidden {
+  display: none;
+}

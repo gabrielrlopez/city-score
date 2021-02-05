@@ -1,33 +1,56 @@
 import React from 'react'
-import { Card, CardActionArea, CardContent, Typography, CardMedia } from '@material-ui/core'
+import { Card, CardActionArea, CardContent, Typography, CardMedia, Badge } from '@material-ui/core'
 import LoadingSpinner from './LoadingSpinner';
 import '../Styles/CityCards.css'
 import { useEffect, useState } from 'react';
 import { svgPaths } from '../util.js'
 import { Pagination } from '@material-ui/lab';
+import SupervisorAccountSharpIcon from '@material-ui/icons/SupervisorAccountSharp';
 
-function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, currentPage, firstContinent, geoName }) {
+function CityCard({ cities, images, scoreLinks, postsPerPage, totalPosts, paginate, currentPage, firstContinent, geoName, infoLinks }) {
     const [clicked, setClick] = useState(false);
     const [scores, setscores] = useState([]);
     const [hiddenScores, setHiddenScores] = useState(false);
     const [arrowVisibility, setArrowVisibility] = useState(false);
     const [changedContinent, setChangedContinent] = useState(false);
-    const [cityCardHeader, setCityCardHeader] = useState(false)
-    const [scoreCardHeader, setScoreCardHeader] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [opacity, setOpacity] = useState(0)
+    const [cityCardHeader, setCityCardHeader] = useState(false);
+    const [scoreCardHeader, setScoreCardHeader] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [opacity, setOpacity] = useState(0);
+    const [cityPopulation, setCityPopulation] = useState([]);
+    const [cityCountry, setCityCountry] = useState([]);
+    let cityPopulationArr = [];
+    let cityCountryArr = [];
+    useEffect(() => {
+        const setPopAndCountry = (links) => {
+            links.map(link =>{
+                fetch(link)
+                .then(response => response.json())
+                .then(data => {
+                    const {population} = data;
+                    const country = data._links['city:country'].name;
+                    cityPopulationArr.push(population);
+                    cityCountryArr.push(country);
+                    setCityPopulation([...cityPopulationArr]);
+                    setCityCountry([...cityCountryArr])
+                })
+            })
+        }
+        setPopAndCountry(infoLinks)
+    }, [cities])
 
     const click = (e) => {
         setLoading(true)
         window.scrollTo(0, 0)
         setClick(true)
         const city = e.target.title
-        const link = links.find(link => link.includes(city.replace(/[,.]/g, "").toLowerCase().split(' ').join('-')))
+        const link = scoreLinks.find(link => link.includes(city.replace(/[,.]/g, "").toLowerCase().split(' ').join('-')))
         fetch(link)
             .then(response => response.json())
             .then(data => {
                 setLoading(false)
                 const { categories } = data
+                console.log(categories);
                 setscores(categories)
             })
 
@@ -78,7 +101,7 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
         if (clicked) setScoreCardHeader(true)
         if (cityCardHeader === true) setScoreCardHeader(false)
     }, [clicked])
-
+console.log(cityPopulation);
 
     return (
         <>
@@ -97,14 +120,31 @@ function CityCard({ cities, images, links, postsPerPage, totalPosts, paginate, c
                                 image={images[i]}
                                 title={city}
                             />
-                            <CardContent>
-                                <Typography
-                                    variant="body2"
+                            <CardContent style={{display:"flex", justifyContent: "space-between"}}>
+                                    <Typography
+                                    >
+                                        {city}
+                                    </Typography>
+                                    <Badge 
+                                    badgeContent={cityPopulation[i]}
+                                    max={100000000}
+                                    // style={{color: "orange"}}
+                                    color={'error'}
+                                    >
+                                        <Typography
+                                        color="textSecondary"
+                                        >Population
+                                        </Typography>
+                                        {/* <SupervisorAccountSharpIcon /> */}
+                                    </Badge>
+                                    <Typography 
                                     color="textSecondary"
-                                >
-                                    {city}
-                                </Typography>
+                                    variant="body1"
+                                    >
+                                        {cityCountry[i]}
+                                    </Typography>
                             </CardContent>
+                            
                         </CardActionArea>
                     </Card>)}
             </div>

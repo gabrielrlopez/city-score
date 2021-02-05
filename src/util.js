@@ -24,18 +24,16 @@ export const getCityScoreLink = (cityName) => (
         })
 )
 
-// //get basic info links for current cities
-// export const getBasicCityInfoLinks = (cityName) => (
-//     fetch(`https://api.teleport.org/api/urban_areas/?embed=ua:item/ua:images`)
-//         .then(response => response.json())
-//         .then(data => {
-//             let city = data._embedded['ua:item'].find(city => city.name === cityName);
-
-//             let basicCityInfo = city._links['ua:identifying-city']['href']
-//             setBasicCityInfo(basicCityInfo)
-
-//         })
-// )
+//get basic info links for current cities
+export const getBasicCityInfoLinks = (cityName) => (
+    fetch(`https://api.teleport.org/api/urban_areas/?embed=ua:item/ua:images`)
+        .then(response => response.json())
+        .then(data => {
+            let city = data._embedded['ua:item'].find(city => city.name === cityName);
+            let basicCityInfo = city._links['ua:identifying-city']['href']
+            return basicCityInfo;
+        })
+);
 
 // svg paths 
 

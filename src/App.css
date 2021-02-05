@@ -1,11 +1,10 @@
-*{
+* {
   margin: 0 auto;
 }
 
-
 .App {
   max-width: 1200px;
-  font-family: 'Gamja Flower', cursive;
+  font-family: "Gamja Flower", cursive;
 }
 
 .spinner {
@@ -17,11 +16,11 @@
   text-align: center;
 }
 
-.select_a_city{
+.select_a_city {
   text-align: center;
 }
 
-.no__cities{
+.no__cities {
   color: red;
   text-align: center;
   margin-top: 50px;
@@ -34,8 +33,9 @@
 }
 
 /*Hidden feature*/
-.select_a_continent--hidden,.no__cities--hidden,
-.card__container--hidden{
+.select_a_continent--hidden,
+.no__cities--hidden,
+.card__container--hidden {
   display: none;
 }
 
