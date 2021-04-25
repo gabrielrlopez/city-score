@@ -7,7 +7,6 @@ import { getBasicCityInfoLinks, getCityImages, getCityScoreLink } from './util.j
 
 
 function App() {
-
   const [cities, setCities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
@@ -40,7 +39,7 @@ function App() {
     setFirstContinent(firstContinent)
   }
 
-  const onContinentChange = (e) => {
+  const onContinentChange = (e) => { 
     setLoading(true)
     const geoName = e.target.value
     setGeoName(geoName)
